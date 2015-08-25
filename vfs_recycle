@@ -1,0 +1,517 @@
+<?xml version='1.0' standalone='yes'?>
+
+<!DOCTYPE PLUGIN [
+<!ENTITY name       "Recycle_Bin">
+<!ENTITY author     "bondoo0">
+<!ENTITY version    "2015.09.01">
+<!ENTITY category   "Utilities">
+<!ENTITY pluginURL  "https://raw.githubusercontent.com/bondoo0/vfs_recycle/dev/vfs_recycle.plg">
+]>
+
+<!-- 
+This version has been patched to run on unRAID 6.1 (Tested & working on 6.1 rc5 )
+Patched by: bondoo0
+-->
+
+<PLUGIN  name="&name;"
+         author="&author;"
+         version="&version;"
+         category="&category;"
+         pluginURL="&pluginURL;">
+
+<FILE Name="/boot/config/plugins/vfs_recycle/vfs_recycle_icon.png">
+<URL>--no-check-certificate https://dl.dropboxusercontent.com/u/1574928/vfs_recycle_icon.png</URL>
+</FILE>
+<FILE Name="/boot/config/plugins/vfs_recycle/vfs_empty.png">
+<URL>--no-check-certificate https://dl.dropboxusercontent.com/u/1574928/vfs_empty.png</URL>
+</FILE>
+<FILE Name="/boot/config/plugins/vfs_recycle/vfs_full.png">
+<URL>--no-check-certificate https://dl.dropboxusercontent.com/u/1574928/vfs_full.png</URL>
+</FILE>
+<FILE Name="/boot/config/plugins/images/device_status.png">
+<URL>--no-check-certificate https://github.com/downloads/Influencer/UNplugged/device_status.png</URL>
+</FILE>
+<FILE Name="/boot/config/plugins/images/new_config.png">
+<URL>--no-check-certificate https://github.com/downloads/Influencer/UNplugged/new_config.png</URL>
+</FILE>
+<FILE Name="/boot/config/plugins/images/information.png">
+<URL>--no-check-certificate https://github.com/downloads/Influencer/UNplugged/information.png</URL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/&name;/README.md">
+<INLINE>
+**&name; Plugin**
+
+This plugin adds the fonctionallity to restore deleted files from Recycle Bin.
+</INLINE>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/&name;/&name;.png" Type="base64">
+<INLINE>
+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
+</INLINE>
+</FILE>
+
+<!-- clean up previous install -->
+<FILE Name="/tmp/vfs_recycle-cleanup" Run="/bin/bash">
+<INLINE>
+<![CDATA[
+[ -d /usr/local/emhttp/plugins/vfs_recycle ] && rm -f -R /usr/local/emhttp/plugins/vfs_recycle
+[ -f /etc/rc.d/rc.vfs_plg ] && rm -f /etc/rc.d/rc.vfs_plg
+[ -f /boot/config/plugins/vfs_recycle/plgver.txt ] && rm -f /boot/config/plugins/vfs_recycle/plgver.txt
+rm /tmp/vfs_recycle-cleanup
+]]>
+</INLINE>
+</FILE>
+
+<FILE Name="/boot/config/plugins/vfs_recycle/plgver.txt">
+<INLINE>
+<![CDATA[
+2015.04.01
+]]>
+</INLINE>
+</FILE>
+
+<FILE Name="/boot/config/plugins/vfs_recycle/vfs_recycle.cfg">
+<INLINE>
+<![CDATA[
+# vfs_recycle configuration:
+SERVICE="disable"
+WEEKLYRUN="no"
+AGE="720"
+]]>
+</INLINE>
+</FILE>
+
+<FILE Name="/boot/config/plugins/vfs_recycle/config/smb-extra.conf">
+<INLINE>
+<![CDATA[
+#vfs_recycle_start
+#Recycle bin share
+[RecycleBin]
+	path = /mnt/user/.Recycle.Bin
+	read only = No
+
+#vfs config
+# Documentation http://www.samba.org/samba/docs/man/manpages-3/smb.conf.5.html
+# Forum topic http://lime-technology.com/forum/index.php?topic=5446.0
+# %S Samba share name (which in unRaid equals the user share name), eg. Storage
+# %P User share full path, eg /mnt/user/Storage
+# %u Username of the current service, if any
+# To apply changes execute: /etc/rc.d/rc.samba restart
+# If the single custom bin solution is chosen, create the dir manually, and grant it g+rwx permissions
+
+[global]
+vfs objects = recycle
+   recycle:repository = /mnt/user/.Recycle.Bin/%P
+        recycle:keeptree = Yes
+        recycle:touch = Yes
+   recycle:touch_mtime = Yes
+        recycle:versions = Yes
+        recycle:exclude = *.tmp   
+        recycle:exclude_dir = .Recycle.Bin
+acl allow execute always = yes
+#vfs_recycle_end
+]]>
+</INLINE>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/scripts/rc.vfs_plg" Mode="0770">
+<INLINE>
+<![CDATA[
+#!/bin/sh
+# start|stop|restart|enable|disable|install|empty vfs_recycle.
+
+vfs_recycle_start()
+{
+	# no-op if not enabled
+	if [ $SERVICE != "enable" ]; then
+		sed -i "s/"disable"/"enable/"" $CONFIG
+	fi
+	
+	# if smb-extras.conf is not found, create it
+	if [ ! -e "/boot/config/smb-extra.conf" ]; then
+		cat /boot/config/plugins/vfs_recycle/config/smb-extra.conf >> /boot/config/smb-extra.conf
+	elif [[ `cat /boot/config/smb-extra.conf | grep "vfs objects"` == '' ]]; then
+		if [ -e "/boot/config/smb-extra.conf" ]; then
+			sed '/#vfs_recycle_start/,/#vfs_recycle_end/{//d}' /boot/config/smb-extra.conf >> smb.tmp
+			printf %s "$(< smb.tmp)" > /boot/config/smb-extra.conf
+			rm smb.tmp
+			cat /boot/config/plugins/vfs_recycle/config/smb-extra.conf >> /boot/config/smb-extra.conf
+		fi
+	fi
+	#If weekly run is enabled, add cron job
+	if [[ $WEEKLYRUN = "yes" ]]; then
+	crontab -l > /tmp/file; echo '#Empty vfs trash once a week' >> /tmp/file; echo '0 3 * * * find /mnt/user/.Recycle.Bin/* -amin +'$AGE' -delete' >>/tmp/file; crontab /tmp/file; rm /tmp/file
+	else
+		if [[ `crontab -l | grep "Empty vfs trash"` != "" ]]; then
+			crontab -l > /tmp/file; sed '/#Empty vfs trash/,/\/mnt\/user\/.Recycle.Bin/d' /tmp/file >> /tmp/cron; crontab /tmp/cron; rm /tmp/file; rm /tmp/cron
+		fi
+	fi
+	CMDLINE="sudo /etc/rc.d/rc.samba restart > /dev/null 2>&1"
+
+	nohup $CMDLINE > /dev/null 2>&1 &
+	
+	echo "... OK"
+	sleep 1
+}
+	
+vfs_recycle_stop()
+{
+ #Do nothing if vfs_recycle is not added
+	if [[ `cat /boot/config/smb-extra.conf | grep "vfs objects"` == '' ]]; then
+		echo vfs_recycle not added
+	else
+	echo "Disabling vfs_recycle..."
+	sleep 1
+	if [[ $WEEKLYRUN = "no" ]]; then
+		if [[ `crontab -l | grep "Empty vfs trash"` != "" ]]; then
+			crontab -l > /tmp/file; sed '/#Empty vfs trash/,/\/mnt\/user\/.Recycle.Bin/d' /tmp/file >> /tmp/cron; crontab /tmp/cron; rm /tmp/file; rm /tmp/cron
+		fi
+	fi
+	sed '/#vfs_recycle_start/,/#vfs_recycle_end/d' /boot/config/smb-extra.conf >> smb.tmp
+	printf %s "$(< smb.tmp)" > /boot/config/smb-extra.conf
+	rm smb.tmp
+	CMDLINE="sudo /etc/rc.d/rc.samba restart > /dev/null 2>&1"
+
+	nohup $CMDLINE > /dev/null 2>&1 &
+	fi
+	sleep 1
+}
+
+vfs_recycle_restart()
+{
+	vfs_recycle_stop
+	sleep 5
+	vfs_recycle_start
+}
+
+vfs_recycle_buttonstart()
+{
+cd /
+echo "Enabling vfs_recycle"
+	CONFIG="/boot/config/plugins/vfs_recycle/vfs_recycle.cfg"
+	if [ -f $CONFIG ]; then
+		sed -i "s/"disable"/"enable/"" $CONFIG
+		sleep 3
+		echo "Starting vfs_recycle"
+	vfs_recycle_start
+	fi
+}
+
+write_config()
+{
+	echo "# vfs_recycle configuration:" > /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+	echo "SERVICE=\"$SERVICE\"" >> /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+	echo "WEEKLYRUN=\"$WEEKLYRUN\"" >> /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+	echo "AGE=\"$AGE\"" >> /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+}
+
+vfs_recycle_change_settings()
+{
+	WEEKLYRUN="$1"
+	AGE="$2"
+}
+
+vfs_recycle_enable()
+{
+	SERVICE=enable
+  		vfs_recycle_change_settings $1 $2 $3 $4 $5 $6 $7 $8 $9
+		write_config
+		vfs_recycle_restart
+}
+
+vfs_recycle_disable()
+{
+	vfs_recycle_stop
+	SERVICE=disable
+	vfs_recycle_change_settings $1 $2 $3 $4 $5 $6 $7 $8 $9
+	write_config
+}
+
+vfs_recycle_updateplg()
+{
+	cd /boot/config/plugins
+	[ -f vfs_recycle_unplugged.plg.old ] && rm -f vfs_recycle_unplugged.plg.old
+	if [ -f vfs_recycle_unplugged.plg ]; then
+	mv vfs_recycle_unplugged.plg vfs_recycle_unplugged.plg.old
+	echo "Updating plugin"
+	wget -q --no-check-certificate https://raw.githubusercontent.com/Jencryzthers/UNplugged/dev/vfs_recycle_unplugged.plg
+	/usr/local/sbin/installplg /boot/config/plugins/vfs_recycle_unplugged.plg
+	else
+	echo "Updating plugin"
+	wget -q --no-check-certificate https://raw.githubusercontent.com/Jencryzthers/UNplugged/dev/vfs_recycle_unplugged.plg
+	/usr/local/sbin/installplg /boot/config/plugins/vfs_recycle_unplugged.plg
+	fi
+}
+
+vfs_recycle_downgradeplg()
+{
+	cd /boot/config/plugins
+	if [ -f vfs_recycle_unplugged.plg.old ]; then
+	rm -f /vfs_recycle_unplugged.plg
+	mv vfs_recycle_unplugged.plg.old vfs_recycle_unplugged.plg
+	echo "downgrading plugin"
+	/usr/local/sbin/installplg /boot/config/plugins/vfs_recycle_unplugged.plg
+	fi
+}
+
+vfs_recycle_empty()
+{
+rm -rf /mnt/user/.Recycle.Bin/*
+}	
+# read our configuration
+source /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+
+case "$1" in
+	'start')
+		vfs_recycle_start
+	;;
+	'stop')
+		vfs_recycle_stop
+	;;
+	'restart')
+		vfs_recycle_restart
+	;;
+	'enable')
+		vfs_recycle_enable $2 $3 $4 $5 $6 $7 $8 $9
+	;;
+	'disable')
+		vfs_recycle_disable $2 $3 $4 $5 $6 $7 $8 $9
+	;;
+	'install')
+		vfs_recycle_install
+	;;
+	'updateplg')
+		vfs_recycle_updateplg
+	;;
+	'downgradeplg')
+		vfs_recycle_downgradeplg
+	;;
+	'buttonstart')
+		vfs_recycle_buttonstart
+	;;
+	'empty')
+		vfs_recycle_empty
+	;;
+	'week')
+		vfs_recycle_week
+	;;
+	*)
+		echo "usage $0 start|stop|restart|enable|disable|install|update|updateplg|downgradeplg|updatedisks|updateshares"
+esac
+]]>
+</INLINE>
+</FILE>
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/vfs_recycle_icon.png">
+<LOCAL>/boot/config/plugins/vfs_recycle/vfs_recycle_icon.png</LOCAL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/vfs_empty.png">
+<LOCAL>/boot/config/plugins/vfs_recycle/vfs_empty.png</LOCAL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/vfs_full.png">
+<LOCAL>/boot/config/plugins/vfs_recycle/vfs_full.png</LOCAL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/device_status.png">
+<LOCAL>/boot/config/plugins/images/device_status.png</LOCAL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/new_config.png">
+<LOCAL>/boot/config/plugins/images/new_config.png</LOCAL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/information.png">
+<LOCAL>/boot/config/plugins/images/information.png</LOCAL>
+</FILE>
+
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/vfs_recycle.page">
+<INLINE>
+Menu="&category;"
+Icon="vfs_recycle_icon.png"
+Version="&version;"
+Type="php"
+Title="&name;"
+---
+<![CDATA[
+<?PHP
+$vfs_recycle_cfg = parse_ini_file( "/boot/config/plugins/vfs_recycle/vfs_recycle.cfg" );
+$vfs_recycle_enabled = no;
+    if (strpos(file_get_contents("/boot/config/smb-extra.conf"),"recycle") !== false):
+	{
+		$vfs_recycle_enabled = yes;
+	}
+	endif;
+$vfs_recycle_trashsize = shell_exec ( "du -sh /mnt/user/.Recycle.Bin | cut -f1" );
+$vfs_recycle_rollback = file_exists( "boot/config/plugins/vfs_recycle_unplugged.plg.old" ) ? "yes" : "no";
+$vfs_recycle_plgver = shell_exec ( "cat /boot/config/plugins/vfs_recycle/plgver.txt" );
+?>
+
+<div style="width: 49%; float:left">
+	<div id="title">
+		<span class="left">Status:&#32;<img src='/plugins/vfs_recycle/device_status.png'>
+			<?if ($vfs_recycle_enabled=="yes"):?>	
+					<span class="green"><b>Enabled</b></span>
+			<?else:?>
+					<span class="red"><b>Disabled</b></span>
+			<?endif;?>	
+		</span>
+	</div>	
+	<?if ($vfs_recycle_enabled=="yes"):?>
+			<div style="position:relative;float:left;width:50%;text-align:right; margin-bottom:24px">
+				<form name="vfs_recycle_start_stop" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg stop">
+					<input type="submit" name="runCmd" value="Stop">
+				</form>
+			</div>
+			<div style="position:relative;float:left;width:50%;margin-bottom:24px">
+				<form name="vfs_recycle_restart" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg restart">
+					<input type="submit" name="runCmd" value="Restart">
+				</form>
+			</div>			
+			<br>
+			<?if (($files = @scandir('/mnt/user/.Recycle.Bin/')) && count($files) > 2):?>
+			<div style="position:relative;float:left;width:100%;text-align:center;margin-bottom;24px">
+					<img src='/plugins/vfs_recycle/vfs_full.png'><br>
+					<b>Recycle Bin Total Size: <?=$vfs_recycle_trashsize?></b>
+				<form name="vfs_recycle_empty" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg empty">
+					<input type="submit" name="runCmd" value="Empty Trash">
+				</form>
+			</div>
+			<?else:?>
+				<div style="position:relative;float:right;width:100%;text-align:center;margin-bottom:24px">
+						<img src='/plugins/vfs_recycle/vfs_empty.png'><br>
+						<b>Recycle Bin is empty</b>
+				<form name="vfs_recycle_empty" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg empty">
+					<input type="submit" name="runCmd" value="Empty Trash" disabled>
+				</form>
+				</div>
+			<?endif;?>
+	<?else:?>
+			<div style="position:relative;float:left;width:100%;text-align:center;margin-bottom:24px">
+				<form name="vfs_recycle_start" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg buttonstart">
+					<input type="submit" name="runCmd" value="Start">
+				</form>
+			</div>
+			<br>
+	<?endif;?>
+	<? if ($vfs_recycle_rollback=="yes"): ?>
+	<div style="position:relative;float:left;width:50%;text-align:right;margin-bottom:24px">
+			<form name="vfs_recycle_update1" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg updateplg">
+					<input type="submit" name="runCmd" value="Update PLG">
+			</form>
+	</div>
+	<div style="position:relative;float:left;width:50%;text-align:left;margin-bottom:24px">
+		<form name="vfs_recycle_downgrade" method="POST" action="/update.htm" target="progressFrame">
+					<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg downgradeplg">
+					<input type="submit" name="runCmd" value="Downgrade PLG">
+			</form>
+	</div>
+	<?else:?>
+	<div style="position:relative;float:right;width:100%;text-align:center;margin-bottom:24px">
+			<form name="vfs_recycle_update" method="POST" action="/update.htm" target="progressFrame">
+				<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg updateplg">			
+				<input type="submit" name="runCmd" value="Update PLG">
+			</form>
+		</div>
+	<?endif;?><br/>	
+		<p style="margin-left:10px;"><b>Plug-in Version: <?="$vfs_recycle_plgver";?></b></p>
+</div>
+<div style="width: 49%; float:right">
+	<div id="title">
+		<span class="left">Configuration:&#32;<img src='/plugins/vfs_recycle/new_config.png'></span>
+	</div>
+	<form name="vfs_recycle_settings" method="POST" action="/update.htm" target="progressFrame">
+		<input type="hidden" name="cmd" value="/etc/rc.d/rc.vfs_plg">
+		<table class="settings">
+			<tr>
+				<td>Enable Recycle Bin:</td>
+				<td>
+					<select name="arg1" size="1">
+						<?=mk_option($vfs_recycle_cfg['SERVICE'], "disable", "No");?>
+						<?=mk_option($vfs_recycle_cfg['SERVICE'], "enable", "Yes");?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Remove trash once a week:</td>
+				<td>
+					<select name="arg2" size="1";>
+						<?=mk_option($vfs_recycle_cfg['WEEKLYRUN'], "yes", "Yes");?>
+						<?=mk_option($vfs_recycle_cfg['WEEKLYRUN'], "no", "No");?>
+					</select>
+				</td>
+			</tr>
+			<tr id="remove" class="remove">
+				<td>Remove files older than:</td>
+				<td><input type="text" name="arg3" maxlength="10" value="<?=$vfs_recycle_cfg['AGE'];?>"> minutes</td>
+			</tr>
+		</table>		
+	</form>
+	<br />
+	<div align="center">
+		<hr size="3" align="center" width="75%" color="grey" style="margin-top:20px;margin-bottom:18px" >
+		<input type="submit" name="runCmd" value="Apply" style="margin-bottom:35px">
+		<button type="button" style="margin-bottom:35px" onClick="done();">Done</button>
+	</div>
+</div>
+]]>
+</INLINE>
+</FILE>
+
+<!-- event handler -->
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/event/disks_mounted" Mode="0770">
+<INLINE>
+<![CDATA[
+#!/bin/bash
+source /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+if [ $SERVICE = enable ]; then
+/etc/rc.d/rc.vfs_plg start
+fi
+]]>
+</INLINE>
+</FILE>
+
+<!-- event handler -->
+<FILE Name="/usr/local/emhttp/plugins/vfs_recycle/event/unmounting_disks" Mode="0770">
+<INLINE>
+<![CDATA[
+#!/bin/bash
+/etc/rc.d/rc.vfs_plg stop
+]]>
+</INLINE>
+</FILE>
+
+<FILE Name="/tmp/vfs_recycle-install" Run="/bin/bash">
+<INLINE>
+<![CDATA[
+# include our config vars
+source /boot/config/plugins/vfs_recycle/vfs_recycle.cfg
+
+# create vfs_recycle-writable directory for pid file
+if [ ! -e /var/run/vfs_recycle ]; then
+	mkdir /var/run/vfs_recycle
+	chown $RUNAS:users /var/run/vfs_recycle
+	chmod 0777 /var/run/vfs_recycle
+fi
+rm /tmp/vfs_recycle-install
+]]>
+</INLINE>
+</FILE>
+
+<FILE Name="/var/log/plugins/vfs_recycle">
+<INLINE>
+<![CDATA[
+
+]]>
+</INLINE>
+</FILE>
+
+</PLUGIN>
